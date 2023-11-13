@@ -10,6 +10,9 @@ CURL_TIMEOUT=${CURL_TIMEOUT:-30}
 WEBHOOK_URL=${WEBHOOK_URL:-""}
 WEBHOOK_JSON_KEY=${WEBHOOK_JSON_KEY:-"text"}
 APPRISE_URL=${APPRISE_URL:-""}
+PUSHOVER_APP_TOKEN=${PUSHOVER_APP_TOKEN:-""}
+PUSHOVER_USER_KEY=${PUSHOVER_USER_KEY:-""}
+PUSHOVER_TITLE=${PUSHOVER_TITLE:-""}
 
 # only use unix domain socket if no TCP endpoint is defined
 case "${DOCKER_SOCK}" in
@@ -105,6 +108,21 @@ generate_apprise_payload() {
 EOF
 }
 
+# https://support.pushover.net/i44-example-code-and-pushover-libraries#unix
+notify_pushover() {
+  local message="$@"
+
+  if [ -n "$PUSHOVER_USER_KEY" ] && [ -n "$PUSHOVER_APP_TOKEN" ]
+  then
+    curl -s \
+      --form-string "token=${PUSHOVER_APP_TOKEN}" \
+      --form-string "user=${PUSHOVER_USER_KEY}" \
+      --form-string "message=${message}" \
+      --form-string "title=${PUSHOVER_TITLE}" \
+      https://api.pushover.net/1/messages.json
+  fi
+}
+
 # SIGTERM-handler
 term_handler() {
   exit 143  # 128 + 15 -- SIGTERM
@@ -151,8 +169,10 @@ then
         then
           echo "$DATE Restarting container $CONTAINER_SHORT_ID failed" >&2
           notify_webhook "Container ${CONTAINER_NAME:1} (${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
+          notify_pushover "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
         else
           notify_webhook "Container ${CONTAINER_NAME:1} (${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
+          notify_pushover "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
         fi
         notify_post_restart_script "$CONTAINER_NAME" "$CONTAINER_SHORT_ID" "$CONTAINER_STATE" "$TIMEOUT" &
       fi
