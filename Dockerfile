@@ -15,6 +15,9 @@ ENV AUTOHEAL_CONTAINER_LABEL=autoheal \
     WEBHOOK_URL="" \
     WEBHOOK_JSON_KEY="content" \
     APPRISE_URL="" \
+    PUSHOVER_APP_TOKEN="" \
+    PUSHOVER_USER_KEY="" \
+    PUSHOVER_TITLE=${PUSHOVER_TITLE="" \
     POST_RESTART_SCRIPT=""
 
 COPY docker-entrypoint /
