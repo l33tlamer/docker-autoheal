@@ -16,8 +16,9 @@ PUSHOVER_USER_KEY=${PUSHOVER_USER_KEY:-""}
 PUSHOVER_TITLE=${PUSHOVER_TITLE:-""}
 NTFY_ENABLE=${NTFY_ENABLE:-"false"}
 NTFY_URL=${NTFY_URL:-""}
+NTFY_TOPIC=${NTFY_TOPIC:-"autoheal"}
 NTFY_TOKEN=${NTFY_TOKEN:-""}
-NTFY_TITLE=${NTFY_TITLE:-""}
+NTFY_TITLE=${NTFY_TITLE:-"Autoheal"}
 NTFY_PRIORITY=${NTFY_PRIORITY:-"default"}
 NTFY_TAGS=${NTFY_TAGS:-"repeat"}
 
@@ -135,7 +136,7 @@ notify_pushover() {
 notify_ntfy() {
   local message="$@"
 
-  if [ -n "$NTFY_URL" ] && [ -n "$NTFY_TOKEN" ]
+  if [ -n "$NTFY_URL" ] && [ -n "$NTFY_TOKEN" ] && [ -n "$NTFY_TOPIC" ]
   then
     curl -s \
       --form-string "message=${message}" \
@@ -143,7 +144,7 @@ notify_ntfy() {
       --form-string "title=${NTFY_TITLE}" \
       --form-string "priority=${NTFY_PRIORITY}" \
       --form-string "tags=${NTFY_TAGS}" \
-      ${NTFY_URL}
+      ${NTFY_URL}/${NTFY_TOPIC}
   fi
 }
 
