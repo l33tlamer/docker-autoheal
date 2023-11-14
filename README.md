@@ -12,7 +12,7 @@ Features that have been added:
 
 In addition to the existing, the following new **environment variables** can be used:
 
-| `Variable`  | *Default* | `Example` | *Explanation* |
+| Variable | Default | Example | Explanation |
 |:-------------:|:-------------:|:-------------:|:-------------:|
 | `PUSHOVER_USER_KEY` | *none* | `ABCD` | *Your User Key* |
 | `PUSHOVER_APP_TOKEN` | *none* | `1234` | *Your App Token* |
