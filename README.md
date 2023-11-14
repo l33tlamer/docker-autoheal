@@ -6,7 +6,7 @@ Monitor and restart unhealthy docker containers.
 This functionality was proposed to be included with the addition of `HEALTHCHECK`, however didn't make the cut.
 This container is a stand-in till there is native support for `--exit-on-unhealthy` https://github.com/docker/docker/pull/22719.
 
-Features that have been added:
+# Features that have been added:
 
 * Support for **[Pushover](https://pushover.net/)**, **[ntfy](https://ntfy.sh/)** and **[Gotify](https://gotify.net/)** notifications.
 
@@ -26,7 +26,7 @@ In addition to the existing, the following new **environment variables** can be 
 | `GOTIFY_TITLE` | `Autoheal` | `Autoheal @ Raspberry Basement` | *Message Title to be used* |
 | `GOTIFY_PRIORITY` | `default` | `2` | *Priority of message (1-10, default=0, highest=10, lowest=1)*  |
 
-Example of a complete docker-compose.yml
+# Example of a complete `docker-compose.yml`
 
 ````
 version: "3.3"
@@ -55,4 +55,35 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
 ````
+
+# Docker UNIX Socket
+
+Be aware that providing any container direct access to the Docker UNIX socket is almost equal to providing that container (and any potential exploits) root access to the Docker host machine. Only give socket access (especially read/write) to container images you trust. The advantage is that this is the easiest setup.
+
+To use autoheal with the Docker socket, you need to map the socket path on the host to the container.
+
+Example: `/var/run/docker.sock:/var/run/docker.sock`
+
+# Docker TCP
+
+As a alternative, you can use the Docker host over TCP (refer to the Docker documentation on how to enable and how to secure it).
+
+To use autoheal with Docker over TCP, you do not need to map a volume. Instead set the environment variable `DOCKER_SOCK`.
+
+Example: `DOCKER_SOCK=tcp://HOST:PORT`
+
+# Docker-Socket-Proxy
+
+For increased security i highly recommend using something like https://github.com/Tecnativa/docker-socket-proxy to restrict access to only specific parts of the Docker API over TCP. This may also be easier to setup and restrict to localhost than enabling the Docker host API mentioned above.
+
+To use autoheal with Docker-Socket-Proxy, same as above, set the environment variable `DOCKER_SOCK`.
+
+Example: `DOCKER_SOCK=tcp://HOST:PORT`
+
+# Timezone
+
+If you want to make use of a specific timezone inside the container you can map `/etc/localtime` into the container.
+
+Example: `/etc/localtime:/etc/localtime:ro`
+
 
