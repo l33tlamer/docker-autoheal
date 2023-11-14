@@ -6,7 +6,7 @@ Docker in Swarm Mode and kubernetes can automatically restart containers that be
 
 # Features that have been added:
 
-* Support for **[Pushover](https://pushover.net/)**, **[ntfy](https://ntfy.sh/)** and **[Gotify](https://gotify.net/)** notifications.
+* Native support for **[Pushover](https://pushover.net/)**, **[ntfy](https://ntfy.sh/)** and **[Gotify](https://gotify.net/)** notifications.
 
 Especially **ntfy** and **Gotify** can be useful for **selfhosted** setups when either no internet connection is available and/or when use of thirdparty services should be minimized.
 
