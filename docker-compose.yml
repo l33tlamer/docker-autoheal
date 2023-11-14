@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  autoheal:
+    container_name: autoheal
+    image: l33tlamer/docker-autoheal:latest
+    restart: unless-stopped
+    environment:
+      - "AUTOHEAL_CONTAINER_LABEL=autoheal"
+      - "AUTOHEAL_INTERVAL=10"
+      - "AUTOHEAL_START_PERIOD=60"
+      - "AUTOHEAL_DEFAULT_STOP_TIMEOUT=30"
+      - "CURL_TIMEOUT=30"
+      - "PUSHOVER_USER_KEY=abcd"
+      - "PUSHOVER_APP_TOKEN=1234"
+      - "PUSHOVER_TITLE=Autoheal @ Raspberry Basement"
+      - "NTFY_URL=http://192.168.20.50:8113/autoheal"
+      - "NTFY_TOKEN=ABCD"
+      - "NTFY_TITLE=Autoheal @ Raspberry Basement"
+      - "GOTIFY_URL=http://192.168.20.50:8114/message?token=ABCD"
+      - "GOTIFY_TITLE=Autoheal @ Raspberry Basement"
+      - "GOTIFY_PRIORITY=2"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
