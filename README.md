@@ -6,9 +6,11 @@ Docker in Swarm Mode and kubernetes can automatically restart containers that be
 
 # Features that have been added:
 
-* Native support for **[Pushover](https://pushover.net/)**, **[ntfy](https://ntfy.sh/)** and **[Gotify](https://gotify.net/)** notifications (without having to host a Apprise instance).
+* Native support for **[Pushover](https://pushover.net/)**, **[ntfy](https://ntfy.sh/)** and **[Gotify](https://gotify.net/)** notifications.
 
-Especially **ntfy** and **Gotify** can be useful for **selfhosted** setups when either no internet connection is available and/or when use of thirdparty services should be minimized.
+**[Apprise](https://github.com/caronc/apprise)** is fantastic and supports a **very wide range of notification providers**. Autoheal can use Apprise, however it **doesnt** have its Framework/API builtin. This means you need to host your own instance of Apprise and that can be a bit too **memory-intensive** on devices like 1GB models of Raspberry Pi´s. In such scenarios the native support of ntfy/Gotify is a good alternative without having to run Apprise.
+
+**ntfy** and **Gotify** can also be useful for **selfhosted** setups when either no internet connection is available and/or when use of thirdparty services should be minimized.
 
 # Example docker-compose.yml:
 
@@ -64,10 +66,10 @@ These are the **original** variables offered by autoheal:
 | `DOCKER_SOCK` | `/var/run/docker.sock` | `tcp://localhost:2375` | *Either UNIX socket or TCP address for Docker host access* |
 | `CURL_TIMEOUT` | `30` | `60` | *Timeout for curl connections to the Docker API* |
 | `POST_RESTART_SCRIPT` | *none* | `/opt/script.sh` | *Script to execute after a restart (must be mounted into the container)* |
-| `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
-| `APPRISE_URL` | *none* | `http://localhost:8000/notify` | *Apprise URL to trigger when a container has been restarted* |
+| `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger of a container restart* |
+| `APPRISE_URL` | *none* | `http://192.168.20.50:8000/notify/key/?tags=all` | *URL to Apprise instance to notify of a container restart* |
 
-**NOTE**: **[Apprise](https://github.com/caronc/apprise)** support appears to exist but is **currently not tested**.
+**NOTE**: **[Apprise Framework](https://github.com/caronc/apprise)** is not built-in, a running instance of Apprise is required.
 
 # Optional container label
 
