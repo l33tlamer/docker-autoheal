@@ -27,13 +27,13 @@ services:
     networks:
       - autoheal
     ports:
-      - 127.0.0.1:2375:2375
+      - 127.0.0.1:2375:2375 # bind only to localhost
     environment:
       - "SOCKET_PATH=/var/run/docker.sock"
-      - "POST=1"         # read/write access (required for autoheal)
-      - "CONTAINERS=1"   # Allow access to containers (required for autoheal)
-      - "EVENTS=0"       # Granted by default but not required for autoheal
-      - "PING=0"         # Granted by default but not required for autoheal
-      - "VERSION=0"      # Granted by default but not required for autoheal
+      - "POST=1"            # read/write access (required for autoheal)
+      - "CONTAINERS=1"      # Allow access to containers (required for autoheal)
+      - "EVENTS=0"          # Granted by default but not required for autoheal
+      - "PING=0"            # Granted by default but not required for autoheal
+      - "VERSION=0"         # Granted by default but not required for autoheal
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
