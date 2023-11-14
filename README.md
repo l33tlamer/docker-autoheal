@@ -1,10 +1,10 @@
+## This is a fork of willfarrell/docker-autoheal
+
 # Docker Autoheal
 
 Monitor and restart unhealthy docker containers. 
 This functionality was proposed to be included with the addition of `HEALTHCHECK`, however didn't make the cut.
 This container is a stand-in till there is native support for `--exit-on-unhealthy` https://github.com/docker/docker/pull/22719.
-
-# This is a fork of https://github.com/willfarrell/docker-autoheal
 
 Features that have been added:
 
