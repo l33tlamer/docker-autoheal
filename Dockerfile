@@ -23,6 +23,9 @@ ENV AUTOHEAL_CONTAINER_LABEL=autoheal \
     NTFY_TITLE="" \
     NTFY_PRIORITY="" \
     NTFY_TAGS="" \
+    GOTIFY_URL="" \
+    GOTIFY_TITLE="" \
+    GOTIFY_PRIORITY="" \
     POST_RESTART_SCRIPT=""
 
 COPY docker-entrypoint /
