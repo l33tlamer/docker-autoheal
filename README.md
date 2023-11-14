@@ -67,7 +67,7 @@ These are the **original** variables offered by autoheal:
 | `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
 | `APPRISE_URL` | *none* | `http://localhost:8000/notify` | *Apprise URL to trigger when a container has been restarted* |
 
-**NOTE**: **[Apprise](https://github.com/caronc/apprise) support appears to exist but is **currently not tested**.
+**NOTE**: **[Apprise](https://github.com/caronc/apprise)** support appears to exist but is **currently not tested**.
 
 # Optional container label
 
