@@ -2,15 +2,44 @@
 
 # Docker Autoheal
 
-Monitor and restart unhealthy docker containers. 
-This functionality was proposed to be included with the addition of `HEALTHCHECK`, however didn't make the cut.
-This container is a stand-in till there is native support for `--exit-on-unhealthy` https://github.com/docker/docker/pull/22719.
+*Monitor and restart unhealthy docker containers and get notified about it.*
+
+Docker in Swarm Mode and kubernetes can automatically restart containers that become **unhealthy**. However "stand-alone" Docker still does not have this feature. The healthcheck is a purely informative status and nothing more. This container allows you to automatically restart troublesome containers and receive a notification about it.
 
 # Features that have been added:
 
 * Support for **[Pushover](https://pushover.net/)**, **[ntfy](https://ntfy.sh/)** and **[Gotify](https://gotify.net/)** notifications.
 
-In addition to the existing, the following new **environment variables** can be used:
+Especially **ntfy** and **Gotify** can be useful for **selfhosted** setups when either no internet connection is available and/or when use of thirdparty services should be minimized.
+
+# Example of a basic docker-compose.yml file:
+
+````
+version: "3.3"
+
+services:
+  autoheal:
+    container_name: autoheal
+    image: l33tlamer/docker-autoheal:latest
+    restart: unless-stopped
+    environment:
+      - "PUSHOVER_USER_KEY=abcd"
+      - "PUSHOVER_APP_TOKEN=1234"
+      - "PUSHOVER_TITLE=Autoheal @ Raspberry Basement"
+      - "NTFY_URL=http://192.168.20.50:8113/autoheal"
+      - "NTFY_TOKEN=ABCD"
+      - "NTFY_TITLE=Autoheal @ Raspberry Basement"
+      - "GOTIFY_URL=http://192.168.20.50:8114/message?token=ABCD"
+      - "GOTIFY_TITLE=Autoheal @ Raspberry Basement"
+      - "GOTIFY_PRIORITY=2"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+````
+
+# Environment Variables
+
+The following **new** variables can be used:
 
 | Variable | Default | Example | Explanation |
 |:-------------:|:-------------:|:-------------:|:-------------:|
@@ -26,35 +55,17 @@ In addition to the existing, the following new **environment variables** can be 
 | `GOTIFY_TITLE` | `Autoheal` | `Autoheal @ Raspberry Basement` | *Message Title to be used* |
 | `GOTIFY_PRIORITY` | `default` | `2` | *Priority of message (1-10, default=0, highest=10, lowest=1)*  |
 
-# Example of a complete `docker-compose.yml`
+These are the **original** variables offered by autoheal:
 
-````
-version: "3.3"
-
-services:
-  autoheal:
-    container_name: autoheal
-    image: l33tlamer/docker-autoheal:latest
-    restart: unless-stopped
-    environment:
-      - "AUTOHEAL_CONTAINER_LABEL=autoheal"
-      - "AUTOHEAL_INTERVAL=10"
-      - "AUTOHEAL_START_PERIOD=60"
-      - "AUTOHEAL_DEFAULT_STOP_TIMEOUT=30"
-      - "CURL_TIMEOUT=30"
-      - "PUSHOVER_USER_KEY=abcd"
-      - "PUSHOVER_APP_TOKEN=1234"
-      - "PUSHOVER_TITLE=Autoheal @ Raspberry Basement"
-      - "NTFY_URL=http://192.168.20.50:8113/autoheal"
-      - "NTFY_TOKEN=ABCD"
-      - "NTFY_TITLE=Autoheal @ Raspberry Basement"
-      - "GOTIFY_URL=http://192.168.20.50:8114/message?token=ABCD"
-      - "GOTIFY_TITLE=Autoheal @ Raspberry Basement"
-      - "GOTIFY_PRIORITY=2"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-````
+| Variable | Default | Example | Explanation |
+|:-------------:|:-------------:|:-------------:|:-------------:|
+| `AUTOHEAL_CONTAINER_LABEL` | `autoheal` | `healme` | *Label on containers to watch for (use `all` to watch all containers without using any label)* |
+| `AUTOHEAL_INTERVAL` | `5` | `15` | *How often to check on health status (seconds)* |
+| `AUTOHEAL_START_PERIOD` | `0` | `90` | *Grace period to wait before first check (seconds)* |
+| `AUTOHEAL_DEFAULT_STOP_TIMEOUT` | `10` | `30` | *Grace period to wait before killing a stopped container (seconds)* |
+| `DOCKER_SOCK` | `/var/run/docker.sock` | `tcp://localhost:2375` | *Either UNIX socket or TCP address for Docker host access* |
+| `CURL_TIMEOUT` | `30` | `60` | *Timeout for curl connections to the Docker API* |
+| `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
 
 # Docker UNIX Socket
 
@@ -80,24 +91,10 @@ To use autoheal with Docker-Socket-Proxy, same as above, set the environment var
 
 Example: `DOCKER_SOCK=tcp://HOST:PORT`
 
-# Environment Variables
-
-These are the original variables offered by autoheal:
-
-| Variable | Default | Example | Explanation |
-|:-------------:|:-------------:|:-------------:|:-------------:|
-| `AUTOHEAL_CONTAINER_LABEL` | `autoheal` | `healme` | *Label on containers to watch for (use `all` to watch all containers without using any label)* |
-| `AUTOHEAL_INTERVAL` | `5` | `15` | *How often to check on health status (seconds)* |
-| `AUTOHEAL_START_PERIOD` | `0` | `90` | *Grace period to wait before first check (seconds)* |
-| `AUTOHEAL_DEFAULT_STOP_TIMEOUT` | `10` | `30` | *Grace period to wait before killing a stopped container (seconds)* |
-| `DOCKER_SOCK` | `/var/run/docker.sock` | `tcp://localhost:2375` | *Either UNIX socket or TCP address for Docker host access* |
-| `CURL_TIMEOUT` | `30` | `60` | *Timeout for curl connections to the Docker API* |
-| `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
-
 # Timezone
 
 If you want to make use of a specific timezone inside the container you can map `/etc/localtime` into the container.
 
 Example: `/etc/localtime:/etc/localtime:ro`
 
-
+<br>
