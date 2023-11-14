@@ -18,6 +18,11 @@ ENV AUTOHEAL_CONTAINER_LABEL=autoheal \
     PUSHOVER_APP_TOKEN="" \
     PUSHOVER_USER_KEY="" \
     PUSHOVER_TITLE="" \
+    NTFY_URL="" \
+    NTFY_TOKEN="" \
+    NTFY_TITLE="" \
+    NTFY_PRIORITY="" \
+    NTFY_TAGS="" \
     POST_RESTART_SCRIPT=""
 
 COPY docker-entrypoint /
