@@ -10,9 +10,17 @@ CURL_TIMEOUT=${CURL_TIMEOUT:-30}
 WEBHOOK_URL=${WEBHOOK_URL:-""}
 WEBHOOK_JSON_KEY=${WEBHOOK_JSON_KEY:-"text"}
 APPRISE_URL=${APPRISE_URL:-""}
+PUSHOVER_ENABLE=${PUSHOVER_ENABLE:-"false"}
 PUSHOVER_APP_TOKEN=${PUSHOVER_APP_TOKEN:-""}
 PUSHOVER_USER_KEY=${PUSHOVER_USER_KEY:-""}
 PUSHOVER_TITLE=${PUSHOVER_TITLE:-""}
+NTFY_ENABLE=${NTFY_ENABLE:-"false"}
+NTFY_URL=${NTFY_URL:-""}
+NTFY_TOKEN=${NTFY_TOKEN:-""}
+NTFY_TITLE=${NTFY_TITLE:-""}
+NTFY_PRIORITY=${NTFY_PRIORITY:-"default"}
+NTFY_TAGS=${NTFY_TAGS:-"repeat"}
+
 
 # only use unix domain socket if no TCP endpoint is defined
 case "${DOCKER_SOCK}" in
@@ -123,6 +131,22 @@ notify_pushover() {
   fi
 }
 
+# https://ntfy.local.kraut.dedyn.io/docs/publish/
+notify_ntfy() {
+  local message="$@"
+
+  if [ -n "$NTFY_URL" ] && [ -n "$NTFY_TOKEN" ]
+  then
+    curl -s \
+      --form-string "message=${message}" \
+      --form-string "token=${NTFY_TOKEN}" \
+      --form-string "title=${NTFY_TITLE}" \
+      --form-string "priority=${NTFY_PRIORITY}" \
+      --form-string "tags=${NTFY_TAGS}" \
+      ${NTFY_URL}
+  fi
+}
+
 # SIGTERM-handler
 term_handler() {
   exit 143  # 128 + 15 -- SIGTERM
@@ -170,9 +194,11 @@ then
           echo "$DATE Restarting container $CONTAINER_SHORT_ID failed" >&2
           notify_webhook "Container ${CONTAINER_NAME:1} (${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
           notify_pushover "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
+          notify_ntfy "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
         else
           notify_webhook "Container ${CONTAINER_NAME:1} (${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
           notify_pushover "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
+          notify_ntfy "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
         fi
         notify_post_restart_script "$CONTAINER_NAME" "$CONTAINER_SHORT_ID" "$CONTAINER_STATE" "$TIMEOUT" &
       fi
