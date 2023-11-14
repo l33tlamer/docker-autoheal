@@ -86,13 +86,13 @@ These are the original variables offered by autoheal:
 
 | Variable | Default | Example | Explanation |
 |:-------------:|:-------------:|:-------------:|:-------------:|
-| `AUTOHEAL_CONTAINER_LABEL` | `autoheal` | `healme` | *Label on containers to watch for* |
+| `AUTOHEAL_CONTAINER_LABEL` | `autoheal` | `healme` | *Label on containers to watch for (use `all` to watch all containers without using any label)* |
 | `AUTOHEAL_INTERVAL` | `5` | `15` | *How often to check on health status (seconds)* |
 | `AUTOHEAL_START_PERIOD` | `0` | `90` | *Grace period to wait before first check (seconds)* |
 | `AUTOHEAL_DEFAULT_STOP_TIMEOUT` | `10` | `30` | *Grace period to wait before killing a stopped container (seconds)* |
 | `DOCKER_SOCK` | `/var/run/docker.sock` | `tcp://localhost:2375` | *Either UNIX socket or TCP address for Docker host access* |
 | `CURL_TIMEOUT` | `30` | `60` | *Timeout for curl connections to the Docker API* |
-| `WEBHOOK_URL` | *none* | `http://discord.com/ABCD` | *Webhook URL to trigger when a container has been restarted* |
+| `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
 
 # Timezone
 
