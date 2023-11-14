@@ -63,7 +63,11 @@ These are the **original** variables offered by autoheal:
 | `AUTOHEAL_DEFAULT_STOP_TIMEOUT` | `10` | `30` | *Grace period to wait before killing a stopped container (seconds)* |
 | `DOCKER_SOCK` | `/var/run/docker.sock` | `tcp://localhost:2375` | *Either UNIX socket or TCP address for Docker host access* |
 | `CURL_TIMEOUT` | `30` | `60` | *Timeout for curl connections to the Docker API* |
+| `POST_RESTART_SCRIPT` | *none* | `/opt/script.sh` | *Script to execute after a restart (must be mounted into the container)* |
 | `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
+| `APPRISE_URL` | *none* | `http://localhost:8000/notify` | *Apprise URL to trigger when a container has been restarted* |
+
+**NOTE**: **[Apprise](https://github.com/caronc/apprise) support appears to exist but is **currently not tested**.
 
 # Optional container label
 
