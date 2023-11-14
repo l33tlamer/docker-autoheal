@@ -103,6 +103,8 @@ For increased security you can use something like **[Tecnativa/docker-socket-pro
 
 To use autoheal with Docker-Socket-Proxy, proceed as above, by using the environment variable `DOCKER_SOCK`.
 
+A example for usage with the proxy is provided as `example-docker-compose-proxy.yml`.
+
 # Timezone
 
 If you want to make use of a specific timezone inside the container you can map `/etc/localtime` into the container.
