@@ -18,7 +18,9 @@ NTFY_TOKEN=${NTFY_TOKEN:-""}
 NTFY_TITLE=${NTFY_TITLE:-"Autoheal"}
 NTFY_PRIORITY=${NTFY_PRIORITY:-"default"}
 NTFY_TAGS=${NTFY_TAGS:-"repeat"}
-
+GOTIFY_URL=${GOTIFY_URL:-""}
+GOTIFY_TITLE=${GOTIFY_TITLE:-"Autoheal"}
+GOTIFY_PRIORITY=${GOTIFY_PRIORITY:-"default"}
 
 # only use unix domain socket if no TCP endpoint is defined
 case "${DOCKER_SOCK}" in
@@ -145,6 +147,18 @@ notify_ntfy() {
   fi
 }
 
+# https://gotify.net/docs/pushmsg
+notify_gotify() {
+  local message="$@"
+
+  if [ -n "$GOTIFY_URL" ]
+  then
+    wget -q -O - \
+      --post-data 'title=$GOTIFY_TITLE&message=${message}&priority=$GOTIFY_PRIORITY' \
+      ${GOTIFY_URL}
+  fi
+}
+
 # SIGTERM-handler
 term_handler() {
   exit 143  # 128 + 15 -- SIGTERM
@@ -193,10 +207,12 @@ then
           notify_webhook "Container ${CONTAINER_NAME:1} (${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
           notify_pushover "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
           notify_ntfy "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
+          notify_gotify "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Failed to restart the container!" &
         else
           notify_webhook "Container ${CONTAINER_NAME:1} (${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
           notify_pushover "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
           notify_ntfy "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
+          notify_gotify "Container ${CONTAINER_NAME:1} (ID ${CONTAINER_SHORT_ID}) found to be unhealthy. Successfully restarted the container!" &
         fi
         notify_post_restart_script "$CONTAINER_NAME" "$CONTAINER_SHORT_ID" "$CONTAINER_STATE" "$TIMEOUT" &
       fi
