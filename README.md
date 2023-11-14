@@ -2,7 +2,7 @@
 
 *Monitor and restart unhealthy docker containers and get notified about it.*
 
-Docker in Swarm Mode and kubernetes can automatically restart containers that become **unhealthy**. However "stand-alone" Docker still does not have this feature. The healthcheck is a purely informative status and nothing more. This container allows you to automatically restart troublesome containers and receive a notification about it. This is a fork of willfarrell/docker-autoheal, all credit to the original creator. I only added a few features to it and provide Docker images to use.
+Docker in Swarm Mode and kubernetes can automatically restart containers that become *unhealthy*. However "stand-alone" Docker still does not have this feature. There the healthcheck is a purely informative status and nothing more. This container allows you to automatically restart these troublesome containers and receive a notification about it. This is a fork of **[willfarrell/docker-autoheal](https://github.com/willfarrell/docker-autoheal/)**, all credit to the original creator. I have only added a few features to it and provide Docker images to use.
 
 # Features that have been added:
 
