@@ -20,7 +20,7 @@ NTFY_PRIORITY=${NTFY_PRIORITY:-"default"}
 NTFY_TAGS=${NTFY_TAGS:-"repeat"}
 GOTIFY_URL=${GOTIFY_URL:-""}
 GOTIFY_TITLE=${GOTIFY_TITLE:-"Autoheal"}
-GOTIFY_PRIORITY=${GOTIFY_PRIORITY:-"default"}
+GOTIFY_PRIORITY=${GOTIFY_PRIORITY:-"5"}
 
 # only use unix domain socket if no TCP endpoint is defined
 case "${DOCKER_SOCK}" in
@@ -153,8 +153,10 @@ notify_gotify() {
 
   if [ -n "$GOTIFY_URL" ]
   then
-    wget -q -O - \
-      --post-data 'title=$GOTIFY_TITLE&message=${message}&priority=$GOTIFY_PRIORITY' \
+    curl -s \
+      -F "title=${GOTIFY_TITLE}" \
+      -F "priority=${GOTIFY_PRIORITY}" \
+      -F "message=${message}" \
       ${GOTIFY_URL}
   fi
 }
