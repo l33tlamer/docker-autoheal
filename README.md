@@ -85,6 +85,8 @@ To use autoheal with Docker over TCP, you do not need to map a volume. Instead s
 
 Example: `DOCKER_SOCK=tcp://HOST:PORT`
 
+If you protect the **[Docker TCP port with mTLS](https://docs.docker.com/engine/security/https/)**, you also need to provide *certificate* and *key* files for autoheal with these filenames: `ca.pem` `client-cert.pem` and `client-key.pem`
+
 # Docker-Socket-Proxy
 
 For increased security i highly recommend using something like **[Tecnativa/docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy)** to restrict access to only specific parts of the Docker API over TCP. This may also be easier to setup and restrict to localhost than enabling the Docker host API mentioned above.
