@@ -71,7 +71,7 @@ You can apply the label `autoheal.stop.timeout=20` to individual containers to o
 
 # Docker UNIX Socket
 
-Be aware that providing any container direct access to the Docker UNIX socket is almost equal to providing that container (and any potential exploits) root access to the Docker host machine. Only give socket access (especially read/write) to container images you trust. The advantage is that this is the easiest setup.
+Be aware that providing any container with direct access to the Docker UNIX socket is almost equal to providing that container (and any potential exploits) root access to the Docker host machine. Only give socket access (especially read/write) to container images you trust. The advantage is that this is the easiest setup.
 
 To use autoheal with the Docker socket, you need to map the socket path on the host to the container.
 
@@ -79,7 +79,7 @@ Example: `/var/run/docker.sock:/var/run/docker.sock`
 
 # Docker TCP
 
-As a alternative, you can use the Docker host over TCP (refer to the Docker documentation on how to enable and how to secure it).
+As a alternative, you can use the Docker host over TCP. Refer to the Docker documentation on **[how to enable it](https://docs.docker.com/config/daemon/remote-access/)** and **[how to secure it](https://docs.docker.com/engine/security/protect-access/)**.  
 
 To use autoheal with Docker over TCP, you do not need to map a volume. Instead set the environment variable `DOCKER_SOCK`.
 
@@ -87,7 +87,7 @@ Example: `DOCKER_SOCK=tcp://HOST:PORT`
 
 # Docker-Socket-Proxy
 
-For increased security i highly recommend using something like https://github.com/Tecnativa/docker-socket-proxy to restrict access to only specific parts of the Docker API over TCP. This may also be easier to setup and restrict to localhost than enabling the Docker host API mentioned above.
+For increased security i highly recommend using something like **[Tecnativa/docker-socket-proxy](https://github.com/Tecnativa/docker-socket-proxy)** to restrict access to only specific parts of the Docker API over TCP. This may also be easier to setup and restrict to localhost than enabling the Docker host API mentioned above.
 
 To use autoheal with Docker-Socket-Proxy, same as above, set the environment variable `DOCKER_SOCK`.
 
