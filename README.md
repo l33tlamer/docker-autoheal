@@ -1,10 +1,8 @@
-## This is a fork of willfarrell/docker-autoheal
-
 # Docker Autoheal
 
 *Monitor and restart unhealthy docker containers and get notified about it.*
 
-Docker in Swarm Mode and kubernetes can automatically restart containers that become **unhealthy**. However "stand-alone" Docker still does not have this feature. The healthcheck is a purely informative status and nothing more. This container allows you to automatically restart troublesome containers and receive a notification about it.
+Docker in Swarm Mode and kubernetes can automatically restart containers that become **unhealthy**. However "stand-alone" Docker still does not have this feature. The healthcheck is a purely informative status and nothing more. This container allows you to automatically restart troublesome containers and receive a notification about it. This is a fork of willfarrell/docker-autoheal, all credit to the original creator. I only added a few features to it and provide Docker images to use.
 
 # Features that have been added:
 
@@ -66,6 +64,10 @@ These are the **original** variables offered by autoheal:
 | `DOCKER_SOCK` | `/var/run/docker.sock` | `tcp://localhost:2375` | *Either UNIX socket or TCP address for Docker host access* |
 | `CURL_TIMEOUT` | `30` | `60` | *Timeout for curl connections to the Docker API* |
 | `WEBHOOK_URL` | *none* | `http://example.com/webhook?ABCD` | *Webhook URL to trigger when a container has been restarted* |
+
+# Optional container label
+
+You can apply the label `autoheal.stop.timeout=20` to individual containers to override the the stop timeout on them. This can be useful if you have some that take much longer to properly stop. To avoid having them killed, increase the timeout accordingly.
 
 # Docker UNIX Socket
 
