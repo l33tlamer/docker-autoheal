@@ -10,7 +10,7 @@ Docker in Swarm Mode and kubernetes can automatically restart containers that be
 
 Especially **ntfy** and **Gotify** can be useful for **selfhosted** setups when either no internet connection is available and/or when use of thirdparty services should be minimized.
 
-# Example of a basic docker-compose.yml file:
+# Example docker-compose.yml:
 
 ````
 version: "3.3"
